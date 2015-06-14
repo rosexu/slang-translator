@@ -23,7 +23,8 @@ function initEvents() {
 		}
 	});
 }
-
+//NOTE: MUST READ
+//MU
 
 	
 function warnUser(word){	
@@ -33,7 +34,7 @@ function warnUser(word){
 	    console.log(retrievedefinition());
         console.log(retrievedefinitionurban());
 	}
-});
+}
 
 
 

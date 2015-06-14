@@ -51,8 +51,8 @@ $.ajax({
    	   }
    	   else {
 	   	   var aresult = JSON.stringify(result.definitions[0].text);
-	       console.log(aresult);
-	       callback(JSON.stringify(result.definitions[0].text)); 
+	       consaole.log(aresult);
+	       callback(aresult); 
 	   }
 	}
 });  
@@ -68,8 +68,16 @@ $.ajax({
        xhr.setRequestHeader('Accept','text/plain');
    },
    success: function(result) { 
-       console.log(JSON.stringify(result.list[0].definition));
-       callback(JSON.stringify(result.list[0].definition)); }
+   		if (typeof result.list[0] === 'undefined') {
+   	   		console.log("word is undefined");
+   	   		callback("");
+   	   	}
+   	   	else {
+   	   		var aresult = JSON.stringify(result.list[0].definition);
+   	   		console.log(aresult);
+   	   		callback(aresult);
+   	   	}
+       }
 });  
      
 }
