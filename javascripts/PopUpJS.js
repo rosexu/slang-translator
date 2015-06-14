@@ -39,6 +39,6 @@ function placeTooltip(x_pos, y_pos) {
     d.style.top = y_pos + 'px';
 }
 
-$(function () {
+/*$(function () {
     $(document).tooltip();
-});
+});*/
