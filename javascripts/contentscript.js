@@ -10,9 +10,9 @@ function initVariables() {
 
 function initEvents() {
 	$(this.bod).bind('mouseup', function() {
-		var selection = window.getSelection().toString().toLowerCase();
-		if (selection === "") {
-			console.log("selection is empty");
+		var selection = window.getSelection().toString().toLowerCase().trim();
+		if (selection === "" || checkifoneword(selection) === false || detectpunctuation(selection)) {
+			console.log("selection is invalid");
 		}
 		else {
 			console.log(selection);
@@ -42,6 +42,12 @@ function checkifoneword(a_string){
 
     var parts = a_string.split(" ");
     var length=parts.length;
-    if (length>1) {return true;}
-    else {return false;}
+    if (length>1) {return false;}
+    else {return true;}
+}
+
+function detectpunctuation (a_string)
+{
+    var has_illegal_char=a_string.match(/[^A-Za-z0-9\-']/);    
+    return has_illegal_char;
 }

@@ -16,15 +16,6 @@ chrome.runtime.onMessage.addListener(
 		}
 	});
 
-function sendUrbanAPICall(word, sendResponse) {
-	var baseAPIstr = "http://api.urbandictionary.com/v0/define?term=";
-	var completeAPIquery = baseAPIstr + word;
-	console.log("sending api call");
-	$.get(completeAPIquery, function(response){
-		console.log(response);
-		sendResponse(response);
-	});
-}
 
 function getSelectionText() {
     var text = "";
