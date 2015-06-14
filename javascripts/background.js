@@ -46,12 +46,12 @@ $.ajax({
    },
    success: function(result) {
    	   if (typeof result.definitions[0] === 'undefined') {
-   	   		console.log("word is undefined");
+   	   		console.log("word is undefined in normal dictionary");
    	   		implement_urban_api(word, callback);
    	   }
    	   else {
 	   	   var aresult = JSON.stringify(result.definitions[0].text);
-	       consaole.log(aresult);
+	       console.log(aresult);
 	       callback(aresult); 
 	   }
 	}
@@ -69,7 +69,7 @@ $.ajax({
    },
    success: function(result) { 
    		if (typeof result.list[0] === 'undefined') {
-   	   		console.log("word is undefined");
+   	   		console.log("word is undefined in urbandictionary");
    	   		callback("");
    	   	}
    	   	else {

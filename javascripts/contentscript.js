@@ -10,12 +10,12 @@ function initVariables() {
 
 function initEvents() {
 	$(this.bod).bind('mouseup', function() {
-		var selection = window.getSelection().toString();
+		var selection = window.getSelection().toString().toLowerCase();
 		if (selection === "") {
 			console.log("selection is empty");
 		}
 		else {
-			console.log(window.getSelection().toString());
+			console.log(selection);
 			chrome.runtime.sendMessage(selection, function(response) {
 				this.definition = response;
 				console.log(response);
