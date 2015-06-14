@@ -9,12 +9,14 @@ $(function () {
 });
 
 function initVariables() {
-	this.bod = $(document).find("body");
 	makeTooltip();
+	this.bod = $(document).find("body");
 }
 
 function initEvents() {
-	$(this.bod).bind('mouseup', function() {
+	$(this.bod).bind('mouseup', function(e) {
+		var tool = document.getElementsByClassName('tooltip-container');
+		tool[0].style.display = "none";
 		var selection = window.getSelection().toString().toLowerCase().trim();
 		if (selection === "" || checkifoneword(selection) === false || detectpunctuation(selection)) {
 			console.log("selection is invalid");
@@ -26,7 +28,8 @@ function initEvents() {
 				console.log(response);
 				// document.getElementById("tooltip").innerHTML = response;
 				this.tooltip.innerHTML = response;
-				$(this.tooltip).show();
+				placeTooltip(tool[0], e.pageX, e.pageY);
+				tool[0].style.display = "block";
 			});
 		}
 	});
@@ -35,6 +38,7 @@ function initEvents() {
 function makeTooltip(){
 	this.tooltip = document.createElement('div');
 	this.tooltip.className = "tooltip-container";
+	this.tooltip.style.display = "none";
 	document.body.appendChild(this.tooltip);
 }
 
@@ -47,11 +51,11 @@ function getSelectionText() {
 }
 
 
-function placeTooltip(x_pos, y_pos) {
-    var d = document.getElementById('tooltip');
-    d.style.position = "absolute";
-    d.style.left = x_pos + 'px';
-    d.style.top = y_pos + 'px';
+function placeTooltip(tooltip, x_pos, y_pos) {
+    // var d = document.getElementById('tooltip');
+    tooltip.style.position = "absolute";
+    tooltip.style.left = x_pos + 'px';
+    tooltip.style.top = y_pos + 'px';
 }
 
 	
