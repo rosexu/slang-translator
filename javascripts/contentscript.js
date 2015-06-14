@@ -10,6 +10,18 @@ function initVariables() {
 
 function initEvents() {
 	$(this.bod).bind('mouseup', function() {
-		console.log(window.getSelection().toString());
+		var selection = window.getSelection().toString();
+		if (selection === "") {
+			console.log("selection is empty");
+			chrome.runtime.sendMessage("", function(response) {
+				console.log(response);
+			});
+		}
+		else {
+			console.log(window.getSelection().toString());
+			chrome.runtime.sendMessage(selection, function(response) {
+				console.log(response.toString());
+			});
+		}
 	});
 }
