@@ -6,9 +6,12 @@ chrome.runtime.onMessage.addListener(
 					"from the extension");
 		if (request === "") {
 			sendResponse("");
+			return true;
 		}
 		else {
-			sendUrbanAPICall(request, sendResponse);
+			//sendUrbanAPICall(request, sendResponse);
+			implementdictionaryapi(request, sendResponse);
+			//implement_urban_api(request, sendResponse);
 			return true;
 		}
 	});
@@ -21,4 +24,66 @@ function sendUrbanAPICall(word, sendResponse) {
 		console.log(response);
 		sendResponse(response);
 	});
+}
+
+function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+    console.log(getSelectionText());
+}
+ 
+function implementdictionaryapi(word, callback){
+$.ajax({
+   url: "https://montanaflynn-dictionary.p.mashape.com/define?word=" + word,
+   type: "GET",
+   beforeSend: function(xhr){xhr.setRequestHeader('X-Mashape-Key', 'A83cRYKgDUmshj54WtntYY9pUFnWp19CDK6jsnLqO8Rn3bBMh3');
+       xhr.setRequestHeader('Accept','application/json');
+   },
+   success: function(result) {
+   	   if (typeof result.definitions[0] === 'undefined') {
+   	   		console.log("word is undefined");
+   	   		implement_urban_api(word, callback);
+   	   }
+   	   else {
+	   	   var aresult = JSON.stringify(result.definitions[0].text);
+	       console.log(aresult);
+	       callback(JSON.stringify(result.definitions[0].text)); 
+	   }
+	}
+});  
+     
+}
+ 
+ 
+function implement_urban_api(word, callback){
+$.ajax({
+   url: "https://mashape-community-urban-dictionary.p.mashape.com/define?term=" + word,
+   type: "GET",
+   beforeSend: function(xhr){xhr.setRequestHeader('X-Mashape-Key', 'A83cRYKgDUmshj54WtntYY9pUFnWp19CDK6jsnLqO8Rn3bBMh3');
+       xhr.setRequestHeader('Accept','text/plain');
+   },
+   success: function(result) { 
+       console.log(JSON.stringify(result.list[0].definition));
+       callback(JSON.stringify(result.list[0].definition)); }
+});  
+     
+}
+ 
+ 
+function retrievedefinition(word){
+    implementdictionaryapi(word, function(result1){
+        document.getElementById("output").innerHTML = result1;
+ 
+    });
+}
+ 
+function retrievedefinitionurban(word){
+    implement_urban_api(word, function(result){
+        document.getElementById("output2").innerHTML = result;
+    });
 }

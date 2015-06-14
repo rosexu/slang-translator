@@ -13,13 +13,11 @@ function initEvents() {
 		var selection = window.getSelection().toString();
 		if (selection === "") {
 			console.log("selection is empty");
-			chrome.runtime.sendMessage("", function(response) {
-				console.log(response);
-			});
 		}
 		else {
 			console.log(window.getSelection().toString());
 			chrome.runtime.sendMessage(selection, function(response) {
+				this.definition = response;
 				console.log(response);
 			});
 		}
