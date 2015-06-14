@@ -20,7 +20,7 @@ function initEvents() {
 		else {
 			console.log(window.getSelection().toString());
 			chrome.runtime.sendMessage(selection, function(response) {
-				console.log(response.toString());
+				console.log(response);
 			});
 		}
 	});
