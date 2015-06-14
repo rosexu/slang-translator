@@ -1,4 +1,4 @@
-$( document ).ready(function() {
+$(document ).ready(function() {
     console.log("web page loaded!");
     console.log(retrievedefinition());
     console.log(retrievedefinitionurban());
