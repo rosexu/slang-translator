@@ -1,0 +1,16 @@
+.btn-group-vertical {
+	width: 150px;
+}
+
+.btn {
+	text-align: left;
+}
+
+.glyphicon {
+	margin-left: 50px;
+}
+
+.btn-default:focus {
+	background-color: #fff;
+	outline-color: #fff;
+}
