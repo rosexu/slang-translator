@@ -27,7 +27,7 @@
       "js": ["bower_components/jquery/dist/jquery.min.js", 
              "bower_components/jquery-ui/jquery-ui.min.js", 
              "javascripts/contentscript.js"],
-      "css": ["PopUpCSS.css"],
+      "css": ["styles/tooltip.css"],
       "all_frames": false
     }
   ]
