@@ -4,32 +4,32 @@ $( document ).ready(function() {
 	console.log("web page loaded!");
 });
 
-$(function () {
-    $(document).tooltip();
-});
-
 function initVariables() {
 	makeTooltip();
 	this.bod = $(document).find("body");
+	this.$tooltip = $(document).find(".tooltip-container");
+	console.log(this.$tooltip);
 }
 
 function initEvents() {
+	var self = this;
 	$(this.bod).bind('mouseup', function(e) {
-		var tool = document.getElementsByClassName('tooltip-container');
-		tool[0].style.display = "none";
+		self.$tooltip.hide();
 		var selection = window.getSelection().toString().toLowerCase().trim();
-		if (selection === "" || checkifoneword(selection) === false || detectpunctuation(selection)) {
+		if (selection === "" || isOneWord(selection) === false || hasInvalidSymbols(selection)) {
 			console.log("selection is invalid");
 		}
 		else {
 			console.log(selection);
-			chrome.runtime.sendMessage(selection, function(response) {
-				this.definition = response;
-				console.log(response);
-				// document.getElementById("tooltip").innerHTML = response;
-				this.tooltip.innerHTML = response;
-				placeTooltip(tool[0], e.pageX, e.pageY);
-				tool[0].style.display = "block";
+			chrome.runtime.sendMessage(selection, function(definition) {
+				console.log(definition);
+				if (definition === "") {
+					this.tooltip.innerHTML = "No definition found for " + '\"' + selection + '\"';
+				} else {
+					this.tooltip.innerHTML = definition;
+				}
+				placeTooltip(e.pageX, e.pageY);
+				self.$tooltip.show();
 			});
 		}
 	});
@@ -51,35 +51,22 @@ function getSelectionText() {
 }
 
 
-function placeTooltip(tooltip, x_pos, y_pos) {
-    // var d = document.getElementById('tooltip');
-    tooltip.style.position = "absolute";
-    tooltip.style.left = x_pos + 'px';
-    tooltip.style.top = y_pos + 'px';
+function placeTooltip(x_pos, y_pos) {
+    this.tooltip.style.position = "absolute";
+    this.tooltip.style.left = x_pos + 'px';
+    this.tooltip.style.top = y_pos + 'px';
 }
 
-	
-function warnUser(word){	
-	if (checkifoneword(word))
-	{console.log("Please highlight only one word (multiword functionality may be added in future)");}
-	else {
-	    console.log(retrievedefinition());
-        console.log(retrievedefinitionurban());
-	}
+function isOneWord(str){
+    var parts = str.split(" ");
+    var length = parts.length;
+    if (length > 1) {
+		return false;
+    } else {
+		return true;
+    }
 }
 
-
-
-function checkifoneword(a_string){
-
-    var parts = a_string.split(" ");
-    var length=parts.length;
-    if (length>1) {return false;}
-    else {return true;}
-}
-
-function detectpunctuation (a_string)
-{
-    var has_illegal_char=a_string.match(/[^A-Za-z0-9\-']/);    
-    return has_illegal_char;
+function hasInvalidSymbols (str) {
+    return str.match(/[^A-Za-z0-9\-']/);
 }
