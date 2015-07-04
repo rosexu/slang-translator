@@ -8,13 +8,17 @@ function initVariables() {
 	makeTooltip();
 	this.bod = $(document).find("body");
 	this.$tooltip = $(document).find(".tooltip-container");
-	console.log(this.$tooltip);
+	this.enabled = true;
 }
 
 function initEvents() {
 	var self = this;
-	$(this.bod).bind('mouseup', function(e) {
-		self.$tooltip.hide();
+	$(this.bod).mouseup( $.proxy( function(e) {
+		this.$tooltip.hide();
+		if (this.enabled === false) {
+			console.log("thing is disabled");
+			return;
+		}
 		var selection = window.getSelection().toString().toLowerCase().trim();
 		if (selection === "" || isOneWord(selection) === false || hasInvalidSymbols(selection)) {
 			console.log("selection is invalid");
@@ -29,10 +33,35 @@ function initEvents() {
 					this.tooltip.innerHTML = definition;
 				}
 				placeTooltip(e.pageX, e.pageY);
-				self.$tooltip.show();
+				this.$tooltip.show();
 			});
 		}
+	}, this));
+}
+
+chrome.runtime.onMessage.addListener(
+	function(request, sender, sendResponse) {
+		console.log("message received");
+		console.log(request);
+		if (request === "disable") {
+			disable();
+			sendResponse("disabled");
+		}
+		else if (request === "enable") {
+			enable();
+			sendResponse("enabled");
+		}
+		else {
+			sendResponse("");
+		}
 	});
+
+function disable() {
+	this.enabled = false;
+}
+
+function enable() {
+	this.enabled = true;
 }
 
 function makeTooltip(){
