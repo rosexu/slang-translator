@@ -22,7 +22,7 @@ function initVariables() {
 }
 
 function initEvents() {
-	$(this.$disableButton).bind('click', function() {
+	this.$disableButton.bind('click', function() {
 		if ($checkmark.hasClass('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, "disable", function(response) {
@@ -38,5 +38,9 @@ function initEvents() {
 			});
 			$checkmark.addClass('hidden');
 		}
+	});
+
+	this.$helpButton.bind('click', function() {
+		chrome.tabs.create({ url: "https://github.com/rosexu/slang-translator" });
 	});
 }
