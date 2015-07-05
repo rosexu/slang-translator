@@ -51,6 +51,9 @@ chrome.runtime.onMessage.addListener(
 			enable();
 			sendResponse("enabled");
 		}
+		else if (request === "status") {
+			sendResponse(this.enabled);
+		}
 		else {
 			sendResponse("");
 		}

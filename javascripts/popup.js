@@ -1,6 +1,17 @@
 $( document ).ready(function() {
 	initVariables();
 	initEvents();
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+		chrome.tabs.sendMessage(tabs[0].id, "status", function(response) {
+			console.log(response);
+			if (response) {
+				$checkmark.addClass('hidden');
+			}
+			else {
+				$checkmark.removeClass('hidden');
+			}
+		});
+	});
 });
 
 function initVariables() {
