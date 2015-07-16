@@ -15,6 +15,10 @@ function initEvents() {
 	var self = this;
 	$(this.bod).mouseup( $.proxy( function(e) {
 		this.$tooltip.hide();
+		chrome.runtime.sendMessage("status", function(state) {
+			console.log("state is" + state);
+			this.enabled = state;
+		});
 		if (this.enabled === false) {
 			console.log("thing is disabled");
 			return;

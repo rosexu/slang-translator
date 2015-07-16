@@ -19,16 +19,19 @@ function initVariables() {
 	this.$disableButton = $menu.find('#disable-btn');
 	this.$checkmark = $disableButton.find('.glyphicon.glyphicon-ok.checkmark');
 	this.$helpButton = $menu.find('#help-btn');
+	this.port = chrome.extension.connect({name: "state"});
 }
 
 function initEvents() {
-	this.$disableButton.bind('click', function() {
+	this.$disableButton.click( $.proxy( function() {
 		if ($checkmark.hasClass('hidden')) {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 				chrome.tabs.sendMessage(tabs[0].id, "disable", function(response) {
 					console.log(response);
 				});
 			});
+
+			this.port.postMessage("disable");
 			$checkmark.removeClass('hidden');
 		} else {
 			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -36,11 +39,17 @@ function initEvents() {
 					console.log(response);
 				});
 			});
+
+			this.port.postMessage("enable");
 			$checkmark.addClass('hidden');
 		}
-	});
+	}, this));
 
 	this.$helpButton.bind('click', function() {
 		chrome.tabs.create({ url: "https://github.com/rosexu/slang-translator" });
+	});
+
+	this.port.onMessage.addListener(function(msg) {
+        console.log("message recieved by popup.js: "+ msg);
 	});
 }

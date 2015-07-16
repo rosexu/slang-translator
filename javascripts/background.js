@@ -1,3 +1,5 @@
+var enabled = true;
+
 chrome.runtime.onMessage.addListener(
 function(request, sender, sendResponse) {
 // console.log("request triggered: " + request);
@@ -11,10 +13,26 @@ function(request, sender, sendResponse) {
     if (request === "") {
         sendResponse("");
         return true;
+    }
+    else if (request === "status") {
+        sendResponse(enabled);
     } else {
         ImplementDictionaryAPI(request, sendResponse);
         return true;
     }
+});
+
+chrome.extension.onConnect.addListener(function(port) {
+    console.log("Connected .....");
+    port.onMessage.addListener(function(msg) {
+        console.log("message recieved by background.js: "+ msg);
+        if (msg === "disable") {
+            enabled = false;
+        } else if (msg = "enable") {
+            enabled = true;
+        }
+        port.postMessage("Set enabled to: " + enabled);
+    });
 });
  
 function ImplementDictionaryAPI(word, callback){
