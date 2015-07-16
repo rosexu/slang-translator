@@ -2,17 +2,6 @@ $( document ).ready(function() {
 	initVariables();
 	initEvents();
 	postToPort("status");
-	// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-	// 	chrome.tabs.sendMessage(tabs[0].id, "status", function(response) {
-	// 		console.log(response);
-	// 		if (response) {
-	// 			$checkmark.addClass('hidden');
-	// 		}
-	// 		else {
-	// 			$checkmark.removeClass('hidden');
-	// 		}
-	// 	});
-	// });
 });
 
 function postToPort(query) {
@@ -31,21 +20,9 @@ function initVariables() {
 function initEvents() {
 	this.$disableButton.click( $.proxy( function() {
 		if ($checkmark.hasClass('hidden')) {
-			// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			// 	chrome.tabs.sendMessage(tabs[0].id, "disable", function(response) {
-			// 		console.log(response);
-			// 	});
-			// });
-
 			this.port.postMessage("disable");
 			$checkmark.removeClass('hidden');
 		} else {
-			// chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-			// 	chrome.tabs.sendMessage(tabs[0].id, "enable", function(response) {
-			// 		console.log(response);
-			// 	});
-			// });
-
 			this.port.postMessage("enable");
 			$checkmark.addClass('hidden');
 		}
