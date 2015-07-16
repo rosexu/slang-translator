@@ -28,10 +28,13 @@ chrome.extension.onConnect.addListener(function(port) {
         console.log("message recieved by background.js: "+ msg);
         if (msg === "disable") {
             enabled = false;
-        } else if (msg = "enable") {
+            port.postMessage("Set enabled to: " + enabled);
+        } else if (msg === "enable") {
             enabled = true;
+            port.postMessage("Set enabled to: " + enabled);
+        } else if (msg === "status") {
+            port.postMessage({status: enabled});
         }
-        port.postMessage("Set enabled to: " + enabled);
     });
 });
  
