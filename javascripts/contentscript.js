@@ -12,13 +12,10 @@ function initVariables() {
 }
 
 function initEvents() {
-	var self = this;
 	$(this.bod).mouseup( $.proxy( function(e) {
 		this.$tooltip.hide();
 		chrome.runtime.sendMessage("status", function(state) {
-			console.log("state is" + state);
-			this.enabled = state;
-			if (this.enabled === false) {
+			if (state === false) {
 				console.log("thing is disabled");
 				return;
 			}
@@ -43,34 +40,6 @@ function initEvents() {
 	}, this));
 }
 
-chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
-		console.log("message received");
-		console.log(request);
-		if (request === "disable") {
-			disable();
-			sendResponse("disabled");
-		}
-		else if (request === "enable") {
-			enable();
-			sendResponse("enabled");
-		}
-		else if (request === "status") {
-			sendResponse(this.enabled);
-		}
-		else {
-			sendResponse("");
-		}
-	});
-
-function disable() {
-	this.enabled = false;
-}
-
-function enable() {
-	this.enabled = true;
-}
-
 function makeTooltip(){
 	this.tooltip = document.createElement('div');
 	this.tooltip.className = "tooltip-container";
@@ -85,7 +54,6 @@ function getSelectionText() {
     }
     return text;
 }
-
 
 function placeTooltip(x_pos, y_pos) {
     this.tooltip.style.position = "absolute";
