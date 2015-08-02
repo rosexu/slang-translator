@@ -4,27 +4,46 @@ $( document ).ready(function() {
 	console.log("web page loaded!");
 });
 
+/*	Finds the tooltip and caches it
+ * 
+ *  @method initVariables
+ *  @return {undefined}
+ */
 function initVariables() {
 	makeTooltip();
 	this.bod = $(document).find("body");
 	this.$tooltip = $(document).find(".tooltip-container");
-	this.enabled = true;
 }
 
+/*	This is the meat of the extension, it binds the search to 
+ *  each mouse up
+ * 
+ *  @method initEvents
+ *  @return {undefined}
+ */
 function initEvents() {
 	$(this.bod).mouseup( $.proxy( function(e) {
+		// hides the tooltip, we want the tooltip to disappear if the 
+		// user click outside of it
 		this.$tooltip.hide();
+
+		// sends message to background, if extension is disabled, don't do
+		// anything
 		chrome.runtime.sendMessage("status", function(state) {
 			if (state === false) {
 				console.log("thing is disabled");
 				return;
 			}
+
+			// get highlighted text
 			var selection = window.getSelection().toString().toLowerCase().trim();
 			if (selection === "" || isOneWord(selection) === false || hasInvalidSymbols(selection)) {
 				console.log("selection is invalid");
 			}
 			else {
 				console.log(selection);
+
+				// sends message to background to look up definition of word
 				chrome.runtime.sendMessage(selection, function(definition) {
 					console.log(definition);
 					if (definition === "") {
@@ -32,6 +51,8 @@ function initEvents() {
 					} else {
 						this.tooltip.innerHTML = definition;
 					}
+
+					// show the tooltip to the user right beside the highlighted text
 					placeTooltip(e.pageX, e.pageY);
 					this.$tooltip.show();
 				});
@@ -40,6 +61,11 @@ function initEvents() {
 	}, this));
 }
 
+/*	Make tooltip and append to body
+ * 
+ *  @method makeTooltip
+ *  @return {undefined}
+ */
 function makeTooltip(){
 	this.tooltip = document.createElement('div');
 	this.tooltip.className = "tooltip-container";
@@ -47,6 +73,11 @@ function makeTooltip(){
 	document.body.appendChild(this.tooltip);
 }
 
+/*	Get highlighted text
+ * 
+ *  @method getSelectionText
+ *  @return String text
+ */
 function getSelectionText() {
     var text = "";
     if (window.getSelection) {
@@ -55,12 +86,25 @@ function getSelectionText() {
     return text;
 }
 
+/*	Places the tooltip at the position specified on the 
+ *	window
+ * 
+ *  @method placeTooltip
+ *	@param double x_pos, double y_pos
+ *  @return {undefined}
+ */
 function placeTooltip(x_pos, y_pos) {
     this.tooltip.style.position = "absolute";
     this.tooltip.style.left = x_pos + 'px';
     this.tooltip.style.top = y_pos + 'px';
 }
 
+/*	Checks if selection is one word
+ * 
+ *  @method isOneWord
+ *	@param String str
+ *  @return boolean
+ */
 function isOneWord(str){
     var parts = str.split(" ");
     var length = parts.length;
@@ -71,6 +115,12 @@ function isOneWord(str){
     }
 }
 
+/*	Checks if selection has invalid symbols like / or }
+ * 
+ *  @method hasInvalidSymbols
+ *	@param String str
+ *  @return boolean
+ */
 function hasInvalidSymbols (str) {
     return str.match(/[^A-Za-z0-9\-']/);
 }
