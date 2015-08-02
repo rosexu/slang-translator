@@ -2,10 +2,6 @@ var enabled = true;
 
 chrome.runtime.onMessage.addListener(
 function(request, sender, sendResponse) {
-// console.log("request triggered: " + request);
-// console.log(sender.tab ?
-//"from a content script:" + sender.tab.url :
-//"from the extension");
     if (!sender.tab) {
         console.log("from the extension");
         sendResponse("");
@@ -28,10 +24,10 @@ chrome.extension.onConnect.addListener(function(port) {
         console.log("message recieved by background.js: "+ msg);
         if (msg === "disable") {
             enabled = false;
-            port.postMessage("Set enabled to: " + enabled);
+            port.postMessage("background.js: set enabled to: " + enabled);
         } else if (msg === "enable") {
             enabled = true;
-            port.postMessage("Set enabled to: " + enabled);
+            port.postMessage("background.js: set enabled to: " + enabled);
         } else if (msg === "status") {
             port.postMessage({status: enabled});
         }

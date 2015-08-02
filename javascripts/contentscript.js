@@ -18,28 +18,28 @@ function initEvents() {
 		chrome.runtime.sendMessage("status", function(state) {
 			console.log("state is" + state);
 			this.enabled = state;
+			if (this.enabled === false) {
+				console.log("thing is disabled");
+				return;
+			}
+			var selection = window.getSelection().toString().toLowerCase().trim();
+			if (selection === "" || isOneWord(selection) === false || hasInvalidSymbols(selection)) {
+				console.log("selection is invalid");
+			}
+			else {
+				console.log(selection);
+				chrome.runtime.sendMessage(selection, function(definition) {
+					console.log(definition);
+					if (definition === "") {
+						this.tooltip.innerHTML = "No definition found for " + '\"' + selection + '\"';
+					} else {
+						this.tooltip.innerHTML = definition;
+					}
+					placeTooltip(e.pageX, e.pageY);
+					this.$tooltip.show();
+				});
+			}
 		});
-		if (this.enabled === false) {
-			console.log("thing is disabled");
-			return;
-		}
-		var selection = window.getSelection().toString().toLowerCase().trim();
-		if (selection === "" || isOneWord(selection) === false || hasInvalidSymbols(selection)) {
-			console.log("selection is invalid");
-		}
-		else {
-			console.log(selection);
-			chrome.runtime.sendMessage(selection, function(definition) {
-				console.log(definition);
-				if (definition === "") {
-					this.tooltip.innerHTML = "No definition found for " + '\"' + selection + '\"';
-				} else {
-					this.tooltip.innerHTML = definition;
-				}
-				placeTooltip(e.pageX, e.pageY);
-				this.$tooltip.show();
-			});
-		}
 	}, this));
 }
 
