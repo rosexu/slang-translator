@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Comprehensive Dictionary",
-  "description": "This extension allows for easy and comprehensive lookup of word definitions",
+  "name": "SlangLang",
+  "description": "Easy and comprehensive lookup of word definitions (including slang)",
   "version": "1.0",
 
   "background": {
