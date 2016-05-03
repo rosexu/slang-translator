@@ -4,7 +4,7 @@ $( document ).ready(function() {
 	console.log("web page loaded!");
 });
 
-/*	Finds the tooltip and caches it
+/*	Finds the tooltip and caches it.
  * 
  *  @method initVariables
  *  @return {undefined}
@@ -15,23 +15,23 @@ function initVariables() {
 	this.$tooltip = $(document).find(".tooltip-container");
 }
 
-/*	This is the meat of the extension, it binds the search to 
- *  each mouse up
+/*	Binds the mouseup event that sends a message to the
+ *  background containing the word selected.
  * 
  *  @method initEvents
  *  @return {undefined}
  */
 function initEvents() {
 	$(this.bod).mouseup( $.proxy( function(e) {
-		// hides the tooltip, we want the tooltip to disappear if the 
-		// user click outside of it
+		// Hides the tooltip; we want the tooltip to disappear if the
+		// user click outside of it.
 		this.$tooltip.hide();
 
-		// sends message to background, if extension is disabled, don't do
-		// anything
+		// Sends message to background, if extension is disabled, don't do
+		// anything.
 		chrome.runtime.sendMessage("status", function(state) {
 			if (state === false) {
-				console.log("thing is disabled");
+				console.log("extension is disabled");
 				return;
 			}
 
@@ -76,7 +76,7 @@ function makeTooltip(){
 /*	Get highlighted text
  * 
  *  @method getSelectionText
- *  @return String text
+ *  @return string text
  */
 function getSelectionText() {
     var text = "";
@@ -102,7 +102,7 @@ function placeTooltip(x_pos, y_pos) {
 /*	Checks if selection is one word
  * 
  *  @method isOneWord
- *	@param String str
+ *	@param string str
  *  @return boolean
  */
 function isOneWord(str){
@@ -118,7 +118,7 @@ function isOneWord(str){
 /*	Checks if selection has invalid symbols like / or }
  * 
  *  @method hasInvalidSymbols
- *	@param String str
+ *	@param string str
  *  @return boolean
  */
 function hasInvalidSymbols (str) {

@@ -34,24 +34,31 @@ chrome.extension.onConnect.addListener(function(port) {
     });
 });
  
+const PARAMS = {
+    useCanonical: true,
+    limit: 10,
+    sourceDictionaries: 'ahd,century,webster',
+    api_key: 'ccce652ea40b38218500f0eee61084a3a8191bd1e7b26a041',
+};
+
 function ImplementDictionaryAPI(word, callback){
     $.ajax({
-        url: "https://montanaflynn-dictionary.p.mashape.com/define?word=" + word,
-        type: "GET",
-        beforeSend: function(xhr){
-            xhr.setRequestHeader('X-Mashape-Key', 'A83cRYKgDUmshj54WtntYY9pUFnWp19CDK6jsnLqO8Rn3bBMh3');
-            xhr.setRequestHeader('Accept','application/json');
-        },
+        url: 'http://api.wordnik.com/v4/word.json/' + word + '/definitions',
+        type: 'GET',
+        data: PARAMS,
         success: function(result) {
-            if (typeof result.definitions[0] === 'undefined') {
-                console.log("word is undefined in normal dictionary");
+            if (!result.length) {
+                console.log('word is undefined in normal dictionary');
                 ImplementUrbanAPI(word, callback);
             }
             else {
-                var aresult = JSON.stringify(result.definitions[0].text);
-                console.log(aresult);
-                callback(aresult);
+                var definition = JSON.stringify(result[0].text);
+                console.log(definition);
+                callback(definition);
             }
+        },
+        failure: function(err, xhr) {
+            console.log(err, xhr);
         }
     });
 }
@@ -71,9 +78,9 @@ function ImplementUrbanAPI(word, callback){
                 callback("");
             }
             else {
-                var aresult = JSON.stringify(result.list[0].definition);
-                console.log(aresult);
-                callback(aresult);
+                var definition = JSON.stringify(result.list[0].definition);
+                console.log(definition);
+                callback(definition);
             }
         }
     });
