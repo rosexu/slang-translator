@@ -3,7 +3,7 @@
 
   "name": "SlangLang",
   "description": "Easy and comprehensive lookup of word definitions (including slang)",
-  "version": "1.0",
+  "version": "1.1",
 
   "background": {
     "scripts": ["javascripts/background.js", "bower_components/jquery/dist/jquery.min.js"]
